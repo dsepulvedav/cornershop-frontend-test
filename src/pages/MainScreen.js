@@ -1,5 +1,6 @@
 import React from 'react';
+import { MainScreenTemplate } from '../components/templates/MainScreenTemplate';
 
 export const MainScreen = () => {
-  return <div></div>;
+  return <MainScreenTemplate />;
 };
