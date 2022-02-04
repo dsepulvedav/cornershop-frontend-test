@@ -14,7 +14,7 @@ import {
   TrashBinIcon,
   useAlert,
   useModal,
-} from './ui/';
+} from './components/atoms/';
 
 import { ReactComponent as Logo } from './logo.svg';
 
