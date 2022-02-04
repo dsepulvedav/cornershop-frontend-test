@@ -1,0 +1,42 @@
+{
+  "name": "cornershop-frontend-test",
+  "version": "1.5.1",
+  "message": "Frontend test for cornershop app",
+  "main": "index.js",
+  "scripts": {
+    "start": "run-p start:*",
+    "start:cra": "react-scripts start",
+    "start:server": "node server/index.js"
+  },
+  "author": "Cornershop",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.19.1",
+    "classnames": "^2.3.1",
+    "cors": "^2.8.5",
+    "express": "^4.17.2",
+    "lodash": "^4.17.21",
+    "morgan": "^1.10.0",
+    "normalize.css": "^8.0.1",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "react-scripts": "^5.0.0",
+    "react-transition-group": "^4.4.2"
+  },
+  "proxy": "http://localhost:3001",
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "npm-run-all": "^4.1.5"
+  }
+}
