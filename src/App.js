@@ -17,6 +17,8 @@ import {
 } from './components/atoms/';
 
 import { ReactComponent as Logo } from './logo.svg';
+import 'bootstrap/dist/css/bootstrap-grid.min.css';
+import 'bootstrap/dist/css/bootstrap-utilities.min.css';
 
 // You don't have to use `fetch` btw, use whatever you want
 const getCounters = () => fetch('/api/v1/counter', { method: 'get' }).then((res) => res.json());
