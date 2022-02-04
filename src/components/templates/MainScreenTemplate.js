@@ -1,5 +1,6 @@
 import React from 'react';
-import { Button } from '../atoms';
+import { Button, Loading, NewIcon } from '../atoms';
+import { NoCountersMessage } from '../molecules/NoCountersMessage';
 import { SearchBar } from '../molecules/SearchBar';
 
 export const MainScreenTemplate = () => {
@@ -13,10 +14,11 @@ export const MainScreenTemplate = () => {
         <div className='col' />
       </header>
       <main className='container-fluid flex-fill py-3'>
-        <div className='row'>
+        <div className='row h-100'>
           <div className='col' />
-          <div className='col-6 px-5'>
-            asdf
+          <div className='col-6 px-5 my-auto text-center'>
+            <NoCountersMessage />
+            <Loading />
           </div>
           <div className='col' />
         </div>
@@ -25,7 +27,9 @@ export const MainScreenTemplate = () => {
         <hr />
         <div className='col' />
         <div className='col-6 text-end'>
-          <Button>+</Button>
+          <Button>
+            <NewIcon fill="var(--white)" />
+          </Button>
         </div>
         <div className='col' />
       </footer>
