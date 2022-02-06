@@ -2,8 +2,11 @@ import React from 'react';
 import { Button, Loading, NewIcon } from '../atoms';
 import { NoCountersMessage } from '../molecules/NoCountersMessage';
 import { SearchBar } from '../molecules/SearchBar';
+import { CounterList } from '../organisms/CounterList';
 
-export const MainScreenTemplate = () => {
+export const MainScreenTemplate = (props) => {
+  const { data, loading, error } = props
+
   return (
     <div className='d-flex flex-column vh-100 py-3'>
       <header className='row'>
@@ -17,8 +20,9 @@ export const MainScreenTemplate = () => {
         <div className='row h-100'>
           <div className='col' />
           <div className='col-6 px-5 my-auto text-center'>
-            <NoCountersMessage />
-            <Loading />
+            {loading && <Loading />}
+            {!loading && !error && !data.length && <NoCountersMessage />}
+            {!loading && !error && data.length > 0 && <CounterList items={data}/>}
           </div>
           <div className='col' />
         </div>
