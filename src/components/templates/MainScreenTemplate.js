@@ -1,5 +1,6 @@
 import React from 'react';
 import { Button, Loading, NewIcon } from '../atoms';
+import { LoadingError } from '../molecules/LoadingError';
 import { NoCountersMessage } from '../molecules/NoCountersMessage';
 import { SearchBar } from '../molecules/SearchBar';
 import { CounterList } from '../organisms/CounterList';
@@ -21,6 +22,7 @@ export const MainScreenTemplate = (props) => {
           <div className='col' />
           <div className='col-6 px-5 my-auto text-center'>
             {loading && <Loading />}
+            {!loading && error && <LoadingError />}
             {!loading && !error && !data.length && <NoCountersMessage />}
             {!loading && !error && data.length > 0 && <CounterList items={data}/>}
           </div>
