@@ -1,4 +1,5 @@
 import React from 'react';
+import { Button } from '../atoms';
 
 export const LoadingError = () => {
   return <div className='text-center'>
