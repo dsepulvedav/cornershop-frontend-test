@@ -1,4 +1,4 @@
-import React, { useReducer } from 'react';
+import React, { useCallback, useReducer } from 'react';
 import { Button, DecrementIcon, IncrementIcon } from '../atoms';
 import './CounterItem.css'
 
@@ -20,7 +20,7 @@ export const CounterItem = (props) => {
     if (action.type === 'DECREMENT') {
       return {
         ...state,
-        count: state.count > 0 ? state.count - 1 : state.count
+        count: state.count ? state.count - 1 : state.count
       }
     }
 
@@ -29,15 +29,37 @@ export const CounterItem = (props) => {
   
   const [counterState, dispatch] = useReducer(counterReducer, item);
 
-  const handleDecrement = () => {
+  const persistIncrement = useCallback(async () => {
+    const body = { id: item.id }
+    const response = await fetch('/api/v1/counter/inc', { 
+      method: 'post', 
+      headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
+      body: JSON.stringify(body) 
+    })
+    const data = await response.json()
+  })
+
+  const persistDecrement = useCallback(async () => {
+    const body = { id: item.id }
+    const response = await fetch('/api/v1/counter/dec', { 
+      method: 'post', 
+      headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
+      body: JSON.stringify(body) 
+    })
+    const data = await response.json()
+  })
+
+  const handleDecrement = useCallback(() => {
     dispatch({ type: 'DECREMENT' })
     typeof onItemDecrement === 'function' && onItemDecrement(item)
-  }
+    persistDecrement()
+  })
 
-  const handleIncrement = () => {
+  const handleIncrement = useCallback(() => {
     dispatch({ type: 'INCREMENT' })
     typeof onItemIncrement === 'function' && onItemIncrement(item)
-  }
+    persistIncrement()
+  })
 
   return (
       <div className='row item-row'>
