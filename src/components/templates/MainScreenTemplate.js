@@ -1,12 +1,15 @@
 import React from 'react';
-import { Button, Loading, NewIcon } from '../atoms';
+import { Button, Loading, NewIcon, useModal } from '../atoms';
 import { LoadingError } from '../molecules/LoadingError';
 import { NoCountersMessage } from '../molecules/NoCountersMessage';
 import { SearchBar } from '../molecules/SearchBar';
 import { CounterList } from '../organisms/CounterList';
+import { CreateCounter } from '../organisms/CreateCounter';
 
 export const MainScreenTemplate = (props) => {
   const { data, loading, error } = props
+
+  const {isVisible: isModalVisible, hideModal, showModal} = useModal()
 
   return (
     <div className='d-flex flex-column vh-100 py-3'>
@@ -24,7 +27,7 @@ export const MainScreenTemplate = (props) => {
             {loading && <Loading />}
             {!loading && error && <LoadingError />}
             {!loading && !error && !data.length && <NoCountersMessage />}
-            {!loading && !error && data.length > 0 && <CounterList items={data}/>}
+            {data && <CounterList items={data}/>}
           </div>
           <div className='col' />
         </div>
@@ -33,9 +36,10 @@ export const MainScreenTemplate = (props) => {
         <hr />
         <div className='col' />
         <div className='col-6 text-end'>
-          <Button>
+          <Button onClick={showModal}>
             <NewIcon fill="var(--white)" />
           </Button>
+          <CreateCounter isVisible={isModalVisible} onClose={hideModal} />
         </div>
         <div className='col' />
       </footer>
