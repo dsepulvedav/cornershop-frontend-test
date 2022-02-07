@@ -6,6 +6,7 @@ import './Button.css';
 const ButtonSizeVariant = {
   Regular: 'regular',
   Big: 'big',
+  Small: 'small'
 };
 const ButtonKindVariant = {
   Regular: 'regular',
@@ -20,6 +21,7 @@ const ButtonColorVariant = {
 
 const ButtonSizeClasses = {
   [ButtonSizeVariant.Regular]: '',
+  [ButtonSizeVariant.Small]: 'cs-button--small',
   [ButtonSizeVariant.Big]: 'cs-button--big',
 };
 const ButtonKindClasses = {
