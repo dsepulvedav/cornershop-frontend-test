@@ -57,6 +57,10 @@
   padding: 12px 18px;
   height: 48px;
 }
+.cs-button--small {
+  padding: 8px 18px;
+  height: 24px;
+}
 
 /* Kind */
 .cs-button--raised {

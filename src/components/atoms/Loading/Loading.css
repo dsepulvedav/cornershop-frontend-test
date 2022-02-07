@@ -5,6 +5,7 @@ https://tobiasahlin.com/spinkit/ */
   position: relative;
   width: 114px;
   height: 114px;
+  margin: 0 auto;
 }
 
 .cs-loading-spinner__bouncer {
