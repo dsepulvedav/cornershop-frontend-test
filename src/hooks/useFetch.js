@@ -30,7 +30,7 @@ const fetchReducer = (state, action) => {
     return state
 }
 
-export const useFetch = (url, method = 'get') => {
+export const useFetch = (url, method = 'get', requestBody) => {
     const [state, dispatch] = useReducer(fetchReducer, initialState)
 
     useEffect(() => {
@@ -38,7 +38,10 @@ export const useFetch = (url, method = 'get') => {
 
         const fetchUrl = async () => {
             try {
-                const response = await fetch(url, { method: method})
+                const response = await fetch(url, { 
+                    method: method, 
+                    body: requestBody ? JSON.stringify(requestBody) : undefined
+                })
                 const data = await response.json()
                 dispatch({ type: 'RESPONSE_COMPLETE', payload: { data } })
             } catch (error) {
