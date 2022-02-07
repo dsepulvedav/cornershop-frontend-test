@@ -14,9 +14,9 @@ export const CounterList = (props) => {
       </div>
       <div className='row'>
       <div className='col'>
-        {items.map(item => {
-          <CounterItem item={item} />
-        })}
+        {items.map(item => 
+          <CounterItem key={item.id} item={item} />
+        )}
       </div>
     </div>
     </>

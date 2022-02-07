@@ -1,5 +1,6 @@
 import React, { useReducer } from 'react';
 import { Button, DecrementIcon, IncrementIcon } from '../atoms';
+import './CounterItem.css'
 
 export const CounterItem = (props) => {
   const { 
@@ -19,7 +20,7 @@ export const CounterItem = (props) => {
     if (action.type === 'DECREMENT') {
       return {
         ...state,
-        count: state.count === 1 ? state.count - 1 : state.count
+        count: state.count > 0 ? state.count - 1 : state.count
       }
     }
 
@@ -30,27 +31,29 @@ export const CounterItem = (props) => {
 
   const handleDecrement = () => {
     dispatch({ type: 'DECREMENT' })
-    onItemDecrement(item)
+    typeof onItemDecrement === 'function' && onItemDecrement(item)
   }
 
   const handleIncrement = () => {
     dispatch({ type: 'INCREMENT' })
-    onItemIncrement(item)
+    typeof onItemIncrement === 'function' && onItemIncrement(item)
   }
 
   return (
-      <div key={item.id} className='row'>
-        <div>
+      <div className='row item-row'>
+        <div className='col-8 col-sm-6 col-xl-9 text-start'>
           {item.title}
         </div>
-        <div>
-          <Button onClick={handleDecrement}>
-            <DecrementIcon />
-          </Button>
-          {item.count}
-          <Button onClick={handleIncrement}>
-            <IncrementIcon />
-          </Button>
+        <div className='col-4 col-sm-6 col-xl-3'>
+          <div className='row'>
+            <Button className='col' kind='flat' color='white' size='small' disabled={!counterState.count} onClick={handleDecrement}>
+              <DecrementIcon />
+            </Button>
+            <div className='col'><strong>{counterState.count}</strong></div>
+            <Button className='col' kind='flat' color='white' size='small' onClick={handleIncrement}>
+              <IncrementIcon />
+            </Button>
+          </div>
         </div>
 
       </div>
