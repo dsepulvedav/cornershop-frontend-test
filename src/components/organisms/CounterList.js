@@ -9,7 +9,7 @@ export const CounterList = (props) => {
     <>
       <div className='row'>
         <div className='col'>
-          <ItemsSummary />
+          {items?.length !== 0 && <ItemsSummary items={items}/>}
         </div>
       </div>
       <div className='row'>
