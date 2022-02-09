@@ -75,6 +75,12 @@
 .cs-button--raised.cs-button--white {
   color: var(--app-tint);
 }
+.cs-button--badge {
+  border-radius: var(--with-radius--large);
+  padding: 12px;
+  font-size: 17px;
+  font-weight: 500;
+}
 
 /* Color */
 .cs-button--danger {
@@ -83,5 +89,9 @@
 }
 .cs-button--white {
   background-color: var(--white);
+  color: var(--black);
+}
+.cs-button--smoke {
+  background-color: var(--smoke);
   color: var(--black);
 }
