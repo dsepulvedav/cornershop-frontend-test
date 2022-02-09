@@ -7,6 +7,7 @@
   --black: #4a4a4a;
   --grey: #888b90;
   --light-grey: #c4c4c4;
+  --smoke: #ececec;
   --silver: #dcdcdf;
 
   --alpha-005: rgba(0,0,0,0.05);
@@ -24,7 +25,7 @@
   
   --with-radius--small: 6px;
   --with-radius: 8px;
-  --with-radius--large: 10px;
+  --with-radius--large: 20px;
 
   /* Shadows */
   --with-shadow: 0 2px 8px 0 var(--alpha-005);
@@ -78,4 +79,19 @@ select {
 }
 .cs-fade-entered {
   opacity: 1;
+}
+
+/* Components styling */
+.create-modal-hint {
+  font-size: 15px;
+  color: var(--grey)
+}
+
+.create-modal-hint a{
+  text-decoration: underline;
+  color: var(--dark-black)
+}
+
+.example-category {
+  font-weight: 500;
 }
