@@ -1,64 +1,18 @@
-import React, { useCallback, useReducer } from 'react';
+import React, { useCallback, useContext, useReducer } from 'react';
+import { CountersContext } from '../../contexts/CountersContext';
 import { Button, DecrementIcon, IncrementIcon } from '../atoms';
 import './CounterItem.css'
 
-export const CounterItem = (props) => {
-  const { 
-    item,
-    onItemIncrement,
-    onItemDecrement 
-  } = props;
+export const CounterItem = ({ item }) => {
 
-  const counterReducer = (state, action) => {
-    if (action.type === 'INCREMENT') {
-      return {
-        ...state,
-        count: state.count + 1
-      }
-    }
-
-    if (action.type === 'DECREMENT') {
-      return {
-        ...state,
-        count: state.count ? state.count - 1 : state.count
-      }
-    }
-
-    return state
-  }
-  
-  const [counterState, dispatch] = useReducer(counterReducer, item);
-
-  const persistIncrement = useCallback(async () => {
-    const body = { id: item.id }
-    const response = await fetch('/api/v1/counter/inc', { 
-      method: 'post', 
-      headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
-      body: JSON.stringify(body) 
-    })
-    const data = await response.json()
-  })
-
-  const persistDecrement = useCallback(async () => {
-    const body = { id: item.id }
-    const response = await fetch('/api/v1/counter/dec', { 
-      method: 'post', 
-      headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
-      body: JSON.stringify(body) 
-    })
-    const data = await response.json()
-  })
+  const { incrementCounter, decrementCounter } = useContext(CountersContext);
 
   const handleDecrement = useCallback(() => {
-    dispatch({ type: 'DECREMENT' })
-    typeof onItemDecrement === 'function' && onItemDecrement(item)
-    persistDecrement()
+    decrementCounter(item.id)
   })
 
   const handleIncrement = useCallback(() => {
-    dispatch({ type: 'INCREMENT' })
-    typeof onItemIncrement === 'function' && onItemIncrement(item)
-    persistIncrement()
+    incrementCounter(item.id)
   })
 
   return (
@@ -68,10 +22,10 @@ export const CounterItem = (props) => {
         </div>
         <div className='col-4 col-sm-6 col-xl-3'>
           <div className='row'>
-            <Button className='col' kind='flat' color='white' size='small' disabled={!counterState.count} onClick={handleDecrement}>
+            <Button className='col' kind='flat' color='white' size='small' disabled={!item.count} onClick={handleDecrement}>
               <DecrementIcon />
             </Button>
-            <div className='col'><strong>{counterState.count}</strong></div>
+            <div className='col'><strong>{item.count}</strong></div>
             <Button className='col' kind='flat' color='white' size='small' onClick={handleIncrement}>
               <IncrementIcon />
             </Button>
