@@ -6,12 +6,15 @@ import './index.css';
 
 import App from './App';
 import { WelcomeScreen } from './pages/WelcomeScreen';
+import { MainScreen } from './pages/MainScreen';
+import { AppRoutes } from './routes/routes';
 
 ReactDOM.render(
     <BrowserRouter>
         <Routes>
-            <Route path="/" element={<WelcomeScreen />} />
-            <Route path="app" element={<App />} />
+            <Route path={AppRoutes.Welcome} element={<WelcomeScreen />} />
+            <Route path={AppRoutes.Home} element={<MainScreen />} />
+            <Route path={AppRoutes.Docs} element={<App />} />
         </Routes>
     </BrowserRouter>, 
     document.getElementById('root')

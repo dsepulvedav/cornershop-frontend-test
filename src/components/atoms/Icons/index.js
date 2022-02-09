@@ -5,3 +5,4 @@ export { default as NewIcon } from './NewIcon';
 export { default as OpenIcon } from './OpenIcon';
 export { default as SearchIcon } from './SearchIcon';
 export { default as TrashBinIcon } from './TrashBinIcon';
+export { default as RefreshIcon } from './RefreshIcon';
