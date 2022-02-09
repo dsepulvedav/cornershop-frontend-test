@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
+import { CountersContext } from '../../contexts/CountersContext';
 import { Button, CloseIcon, Input, Modal } from '../atoms';
 
 export const CreateCounter = (props) => {
@@ -6,20 +7,15 @@ export const CreateCounter = (props) => {
   const { isVisible, onClose } = props
   const [newCounter, setNewCounter] = useState(null);
 
+  const { addCounter } = useContext(CountersContext)
+
   const handleInputChange = (event) => {
     setNewCounter(event.target.value)
   }
-
+  
   const handleSaveButtonClick = async () => {
-    const requestBody = {
-      title: newCounter
-    }
-
-    const response = await fetch('/api/v1/counter', { 
-      method: 'POST', 
-      headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
-      body: JSON.stringify(requestBody)})
-    console.log({response})
+    addCounter(newCounter)
+    onClose()
   }
 
   return (
@@ -29,14 +25,23 @@ export const CreateCounter = (props) => {
       onOpen={() => console.log('Modal was opened')}
     >
       <Modal.Header>
-        <Button color="white" onClick={onClose}><CloseIcon /></Button>
-        <Modal.Title>
-          Create counter
-        </Modal.Title>
-        <Button 
-          disabled={!newCounter}
-          onClick={handleSaveButtonClick}
-        >Save</Button>
+        <div className='d-flex flex-row align-items-center'>
+
+          <Button 
+            kind='flat'
+            color='white' 
+            size='small'
+            className='p-0 pe-3'
+            onClick={onClose}
+          ><CloseIcon /></Button>
+          <Modal.Title className='me-auto'>
+            Create counter
+          </Modal.Title>
+          <Button 
+            disabled={!newCounter}
+            onClick={handleSaveButtonClick}
+          >Save</Button>
+        </div>
       </Modal.Header>
       <Modal.Body>
         <Input placeholder="Cups of coffee" onChange={handleInputChange} />

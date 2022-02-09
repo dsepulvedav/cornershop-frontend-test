@@ -78,7 +78,6 @@ export const CountersProvider = ({ children }) => {
   const [state, dispatch] = useReducer(counterReducer, initialState);
 
   const loadCounters =  async () => {
-    console.log('hola loadCounters');
     dispatch({ type: COUNTER_FETCHING })
     try {
       const response = await fetch('/api/v1/counter')
@@ -99,6 +98,7 @@ export const CountersProvider = ({ children }) => {
     if (!title) return
     const response = await fetch('/api/v1/counter', { 
       method: 'post', 
+      headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
       body: JSON.stringify({title})
     })
     const data = await response.json()
@@ -107,21 +107,25 @@ export const CountersProvider = ({ children }) => {
   }, [dispatch])
 
   const incrementCounter = async (id) => {
+    const body = { id }
+    await fetch('/api/v1/counter/inc', { 
+      method: 'post', 
+      headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
+      body: JSON.stringify(body) 
+    })
 
-      const body = { id }
-      const response = await fetch('/api/v1/counter/inc', { 
-        method: 'post', 
-        headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
-        body: JSON.stringify(body) 
-      })
-      const data = await response.json()
+    dispatch({ type: COUNTER_INC, payload: { id } });
+  }
+  const decrementCounter = async (id) => {
+    const body = { id }
+    await fetch('/api/v1/counter/dec', { 
+      method: 'post', 
+      headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
+      body: JSON.stringify(body) 
+    })
 
-      dispatch({ type: COUNTER_INC, payload: { id } });
-    }
-  const decrementCounter = 
-    id => {
-      dispatch({ type: COUNTER_DEC, payload: { id } });
-    }
+    dispatch({ type: COUNTER_DEC, payload: { id } });
+  }
 
   useEffect(() => {
     loadCounters()
