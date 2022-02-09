@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import { CountersContext } from '../../contexts/CountersContext';
 import { Button, Loading, NewIcon, useModal } from '../atoms';
 import { LoadingError } from '../molecules/LoadingError';
 import { NoCountersMessage } from '../molecules/NoCountersMessage';
@@ -6,8 +7,9 @@ import { SearchBar } from '../molecules/SearchBar';
 import { CounterList } from '../organisms/CounterList';
 import { CreateCounter } from '../organisms/CreateCounter';
 
-export const MainScreenTemplate = (props) => {
-  const { data, loading, error } = props
+export const MainScreenTemplate = () => {
+
+  const { state } = useContext(CountersContext)
 
   const {isVisible: isModalVisible, hideModal, showModal} = useModal()
 
@@ -24,10 +26,10 @@ export const MainScreenTemplate = (props) => {
         <div className='row h-100'>
           <div className='col' />
           <div className='col-6 px-5 my-auto text-center'>
-            {loading && <Loading />}
-            {!loading && error && <LoadingError />}
-            {!loading && !error && !data.length && <NoCountersMessage />}
-            {data && <CounterList items={data}/>}
+            {state.loading && state.counters?.length === 0 && <Loading />}
+            {state.error && <LoadingError />}
+            {!state.counters?.length && <NoCountersMessage />}
+            {state.counters && <CounterList items={state.counters}/>}
           </div>
           <div className='col' />
         </div>

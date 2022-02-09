@@ -1,5 +1,4 @@
 import React, { useReducer, createContext, useCallback, useEffect } from 'react';
-import { useFetch } from '../hooks/useFetch';
 
 export const CountersContext = createContext();
 
