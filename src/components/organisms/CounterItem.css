@@ -3,7 +3,7 @@
     padding-bottom: 21px;
 }
 
-.item-row:hover {
+.item-row:hover, .selected {
     background-color: var(--app-tint-light);
     border-radius: 6px;
 }

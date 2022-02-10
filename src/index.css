@@ -96,3 +96,10 @@ select {
 .example-category {
   font-weight: 500;
 }
+
+.selected-items-count {
+  font-weight: 600;
+  font-size: 17px;
+  line-height: 23px;
+  color: var(--app-tint)
+}

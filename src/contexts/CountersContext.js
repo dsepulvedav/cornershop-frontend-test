@@ -8,14 +8,33 @@ const COUNTER_DEC = 'COUNTER_DEC';
 const COUNTER_FETCHING = 'COUNTER_FETCHING';
 const COUNTER_FETCH_COMPLETE = 'COUNTER_FETCH_COMPLETE';
 const COUNTER_FETCH_ERROR = 'COUNTER_FETCH_ERROR';
+const COUNTER_SELECT = 'COUNTER_SELECT';
+const COUNTER_DESELECT = 'COUNTER_DESELECT';
 
 const initialState = {
   loading: false,
   error: null,
-  counters: null
+  counters: null, 
+  searchBarFocused: false,
+  searchBarTerm: null,
+  selectedCounters: []
 }
 
 const counterReducer = (state, action) => {
+  if (action.type === COUNTER_SELECT) {
+    return {
+      ...state,
+      selectedCounters: [...state.selectedCounters, action.payload]
+    }
+  }
+
+  if (action.type === COUNTER_DESELECT) {
+    return {
+      ...state,
+      selectedCounters: [...state.selectedCounters.filter(item => item !== action.payload)]
+    }
+  }
+
   if (action.type === COUNTER_FETCHING) {
     return {
       ...state,
@@ -26,6 +45,7 @@ const counterReducer = (state, action) => {
 
   if (action.type === COUNTER_FETCH_COMPLETE) {
     return {
+      ...state,
       error: null,
       loading: false,
       counters: action.payload
@@ -34,6 +54,7 @@ const counterReducer = (state, action) => {
 
   if (action.type === COUNTER_FETCH_ERROR) {
     return {
+      ...state,
       error: action.payload,
       loading: false,
       counters: null
@@ -94,6 +115,14 @@ export const CountersProvider = ({ children }) => {
 
   }
 
+  const selectCounter = useCallback(async (id) => {
+    dispatch({ type: COUNTER_SELECT, payload: id })
+  })
+
+  const deselectCounter = useCallback(async (id) => {
+    dispatch({ type: COUNTER_DESELECT, payload: id })
+  })
+
   const addCounter = useCallback( async (title) => {
     if (!title) return
     const response = await fetch('/api/v1/counter', { 
@@ -132,7 +161,15 @@ export const CountersProvider = ({ children }) => {
   }, [])
 
   return (
-    <CountersContext.Provider value={{ state, addCounter, incrementCounter, decrementCounter, loadCounters }}>
+    <CountersContext.Provider value={{ 
+      state, 
+      addCounter, 
+      incrementCounter, 
+      decrementCounter, 
+      loadCounters,
+      selectCounter,
+      deselectCounter
+    }}>
       {children}
     </CountersContext.Provider>
   );

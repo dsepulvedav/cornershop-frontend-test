@@ -1,11 +1,17 @@
-import React, { useCallback, useContext, useReducer } from 'react';
+import React, { useCallback, useContext, useEffect, useReducer, useState } from 'react';
 import { CountersContext } from '../../contexts/CountersContext';
 import { Button, DecrementIcon, IncrementIcon } from '../atoms';
 import './CounterItem.css'
+import classnames from 'classnames';
 
 export const CounterItem = ({ item }) => {
 
-  const { incrementCounter, decrementCounter } = useContext(CountersContext);
+  const [ isSelected, setIsSelected ] = useState(false)
+  const { incrementCounter, decrementCounter, state, selectCounter, deselectCounter } = useContext(CountersContext);
+
+  useEffect(() => {
+    setIsSelected(state.selectedCounters?.includes(item.id))
+  }, [JSON.stringify(state.selectedCounters)])
 
   const handleDecrement = useCallback(() => {
     decrementCounter(item.id)
@@ -15,8 +21,20 @@ export const CounterItem = ({ item }) => {
     incrementCounter(item.id)
   })
 
+  const handleItemClick = useCallback(() => {
+    if (isSelected) {
+      deselectCounter(item.id)
+    } else {
+      selectCounter(item.id)
+    }
+  })
+
+  const rowClasses = isSelected 
+    ? classnames('row', 'item-row', 'selected') 
+    : classnames('row', 'item-row');
+
   return (
-      <div className='row item-row'>
+      <div className={rowClasses} onClick={handleItemClick}>
         <div className='col-8 col-sm-6 col-xl-9 text-start'>
           {item.title}
         </div>
