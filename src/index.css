@@ -1,6 +1,7 @@
 :root {
   /* Colors */
   --app-tint: #ff9500;
+  --app-tint-light: #ff950033;
   --destructive-red: #ff3b30;
   --white: #fff;
   --dark-black: #212121;

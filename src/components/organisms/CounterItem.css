@@ -2,3 +2,8 @@
     padding-top: 23px;
     padding-bottom: 21px;
 }
+
+.item-row:hover {
+    background-color: var(--app-tint-light);
+    border-radius: 6px;
+}
