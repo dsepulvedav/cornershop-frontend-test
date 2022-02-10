@@ -10,6 +10,7 @@ const COUNTER_FETCH_COMPLETE = 'COUNTER_FETCH_COMPLETE';
 const COUNTER_FETCH_ERROR = 'COUNTER_FETCH_ERROR';
 const COUNTER_SELECT = 'COUNTER_SELECT';
 const COUNTER_DESELECT = 'COUNTER_DESELECT';
+const COUNTER_DELETE = 'COUNTER_DELETE';
 
 const initialState = {
   loading: false,
@@ -21,6 +22,14 @@ const initialState = {
 }
 
 const counterReducer = (state, action) => {
+  if (action.type === COUNTER_DELETE) {
+    return {
+      ...state,
+      counters: [...state.counters.filter(item => item.id !== action.payload.id)],
+      selectedCounters: [...state.selectedCounters.filter(item => item.id !== action.payload.id)]
+    }
+  }
+
   if (action.type === COUNTER_SELECT) {
     return {
       ...state,
@@ -31,7 +40,7 @@ const counterReducer = (state, action) => {
   if (action.type === COUNTER_DESELECT) {
     return {
       ...state,
-      selectedCounters: [...state.selectedCounters.filter(item => item !== action.payload)]
+      selectedCounters: [...state.selectedCounters.filter(item => item.id !== action.payload.id)]
     }
   }
 
@@ -115,12 +124,12 @@ export const CountersProvider = ({ children }) => {
 
   }
 
-  const selectCounter = useCallback(async (id) => {
-    dispatch({ type: COUNTER_SELECT, payload: id })
+  const selectCounter = useCallback(async (counter) => {
+    dispatch({ type: COUNTER_SELECT, payload: counter })
   })
 
-  const deselectCounter = useCallback(async (id) => {
-    dispatch({ type: COUNTER_DESELECT, payload: id })
+  const deselectCounter = useCallback(async (counter) => {
+    dispatch({ type: COUNTER_DESELECT, payload: counter })
   })
 
   const addCounter = useCallback( async (title) => {
@@ -156,6 +165,17 @@ export const CountersProvider = ({ children }) => {
     dispatch({ type: COUNTER_DEC, payload: { id } });
   }
 
+  const deleteCounter = async (id) => {
+    const body = { id }
+    await fetch('/api/v1/counter', { 
+      method: 'delete', 
+      headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
+      body: JSON.stringify(body) 
+    })
+
+    dispatch({ type: COUNTER_DELETE, payload: { id } });
+  }
+
   useEffect(() => {
     loadCounters()
   }, [])
@@ -168,7 +188,8 @@ export const CountersProvider = ({ children }) => {
       decrementCounter, 
       loadCounters,
       selectCounter,
-      deselectCounter
+      deselectCounter,
+      deleteCounter
     }}>
       {children}
     </CountersContext.Provider>

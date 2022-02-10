@@ -10,7 +10,7 @@ export const CounterItem = ({ item }) => {
   const { incrementCounter, decrementCounter, state, selectCounter, deselectCounter } = useContext(CountersContext);
 
   useEffect(() => {
-    setIsSelected(state.selectedCounters?.includes(item.id))
+    setIsSelected(state.selectedCounters?.some(counter => counter.id === item.id))
   }, [JSON.stringify(state.selectedCounters)])
 
   const handleDecrement = useCallback(() => {
@@ -23,9 +23,9 @@ export const CounterItem = ({ item }) => {
 
   const handleItemClick = useCallback(() => {
     if (isSelected) {
-      deselectCounter(item.id)
+      deselectCounter(item)
     } else {
-      selectCounter(item.id)
+      selectCounter(item)
     }
   })
 
