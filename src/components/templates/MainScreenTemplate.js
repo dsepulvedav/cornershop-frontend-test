@@ -6,7 +6,7 @@ import { NoCountersMessage } from '../molecules/NoCountersMessage';
 import { SearchBar } from '../molecules/SearchBar';
 import { CounterList } from '../organisms/CounterList';
 import { CreateCounter } from '../organisms/CreateCounter';
-import { DeleteCounter } from '../organisms/DeleteCounter';
+import { DeleteCounter } from '../molecules/DeleteCounter';
 
 export const MainScreenTemplate = () => {
 
