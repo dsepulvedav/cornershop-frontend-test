@@ -1,4 +1,11 @@
 .item-row {
-    padding-top: 23px;
-    padding-bottom: 21px;
+    padding-top: 16px;
+    padding-bottom: 14px;
+    margin-top: 7px;
+    margin-bottom: 7px;
+}
+
+.item-row:hover, .selected {
+    background-color: var(--app-tint-light);
+    border-radius: 6px;
 }
