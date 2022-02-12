@@ -8,14 +8,42 @@ const COUNTER_DEC = 'COUNTER_DEC';
 const COUNTER_FETCHING = 'COUNTER_FETCHING';
 const COUNTER_FETCH_COMPLETE = 'COUNTER_FETCH_COMPLETE';
 const COUNTER_FETCH_ERROR = 'COUNTER_FETCH_ERROR';
+const COUNTER_SELECT = 'COUNTER_SELECT';
+const COUNTER_DESELECT = 'COUNTER_DESELECT';
+const COUNTER_DELETE = 'COUNTER_DELETE';
 
 const initialState = {
   loading: false,
   error: null,
-  counters: null
+  counters: null, 
+  searchBarFocused: false,
+  searchBarTerm: null,
+  selectedCounters: []
 }
 
 const counterReducer = (state, action) => {
+  if (action.type === COUNTER_DELETE) {
+    return {
+      ...state,
+      counters: [...state.counters.filter(item => item.id !== action.payload.id)],
+      selectedCounters: [...state.selectedCounters.filter(item => item.id !== action.payload.id)]
+    }
+  }
+
+  if (action.type === COUNTER_SELECT) {
+    return {
+      ...state,
+      selectedCounters: [...state.selectedCounters, action.payload]
+    }
+  }
+
+  if (action.type === COUNTER_DESELECT) {
+    return {
+      ...state,
+      selectedCounters: [...state.selectedCounters.filter(item => item.id !== action.payload.id)]
+    }
+  }
+
   if (action.type === COUNTER_FETCHING) {
     return {
       ...state,
@@ -26,6 +54,7 @@ const counterReducer = (state, action) => {
 
   if (action.type === COUNTER_FETCH_COMPLETE) {
     return {
+      ...state,
       error: null,
       loading: false,
       counters: action.payload
@@ -34,6 +63,7 @@ const counterReducer = (state, action) => {
 
   if (action.type === COUNTER_FETCH_ERROR) {
     return {
+      ...state,
       error: action.payload,
       loading: false,
       counters: null
@@ -94,6 +124,14 @@ export const CountersProvider = ({ children }) => {
 
   }
 
+  const selectCounter = useCallback(async (counter) => {
+    dispatch({ type: COUNTER_SELECT, payload: counter })
+  })
+
+  const deselectCounter = useCallback(async (counter) => {
+    dispatch({ type: COUNTER_DESELECT, payload: counter })
+  })
+
   const addCounter = useCallback( async (title) => {
     if (!title) return
     const response = await fetch('/api/v1/counter', { 
@@ -101,38 +139,67 @@ export const CountersProvider = ({ children }) => {
       headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
       body: JSON.stringify({title})
     })
+    if (!response.ok) return false
+    
     const data = await response.json()
-
-    if (response.ok) dispatch({ type: COUNTER_ADD, payload: data })
+    dispatch({ type: COUNTER_ADD, payload: data })
+    return true
   }, [dispatch])
 
-  const incrementCounter = async (id) => {
+  const incrementCounter = useCallback(async (id) => {
     const body = { id }
-    await fetch('/api/v1/counter/inc', { 
+    const response = await fetch('/api/v1/counter/incs', { 
       method: 'post', 
       headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
       body: JSON.stringify(body) 
     })
 
+    if (!response.ok) return false
     dispatch({ type: COUNTER_INC, payload: { id } });
-  }
-  const decrementCounter = async (id) => {
+    return true
+  }, [dispatch])
+
+  const decrementCounter = useCallback(async (id) => {
     const body = { id }
-    await fetch('/api/v1/counter/dec', { 
+    const response = await fetch('/api/v1/counter/dec', { 
       method: 'post', 
       headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
       body: JSON.stringify(body) 
     })
 
+    if (!response.ok) return false
     dispatch({ type: COUNTER_DEC, payload: { id } });
-  }
+    return true
+  })
+
+  const deleteCounter = useCallback(async (id) => {
+    const body = { id }
+    const response = await fetch('/api/v1/counter', { 
+      method: 'delete', 
+      headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
+      body: JSON.stringify(body) 
+    })
+
+    if (!response.ok) return false
+    dispatch({ type: COUNTER_DELETE, payload: { id } })
+    return true
+  })
 
   useEffect(() => {
     loadCounters()
   }, [])
 
   return (
-    <CountersContext.Provider value={{ state, addCounter, incrementCounter, decrementCounter, loadCounters }}>
+    <CountersContext.Provider value={{ 
+      state, 
+      addCounter, 
+      incrementCounter, 
+      decrementCounter, 
+      loadCounters,
+      selectCounter,
+      deselectCounter,
+      deleteCounter
+    }}>
       {children}
     </CountersContext.Provider>
   );
