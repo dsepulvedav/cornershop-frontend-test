@@ -11,17 +11,33 @@ const COUNTER_FETCH_ERROR = 'COUNTER_FETCH_ERROR';
 const COUNTER_SELECT = 'COUNTER_SELECT';
 const COUNTER_DESELECT = 'COUNTER_DESELECT';
 const COUNTER_DELETE = 'COUNTER_DELETE';
+const COUNTER_SEARCH_CHANGED = 'COUNTER_SEARCH_CHANGED';
+const COUNTER_SEARCH_FOCUSED = 'COUNTER_SEARCH_FOCUSED';
 
 const initialState = {
   loading: false,
   error: null,
-  counters: null, 
+  counters: [], 
   searchBarFocused: false,
   searchBarTerm: null,
   selectedCounters: []
 }
 
 const counterReducer = (state, action) => {
+  if (action.type === COUNTER_SEARCH_CHANGED) {
+    return {
+      ...state,
+      searchBarTerm: action.payload.searchTerm
+    }
+  }
+
+  if (action.type === COUNTER_SEARCH_FOCUSED) {
+    return {
+      ...state,
+      searchBarFocused: action.payload.searchBarFocused
+    }
+  }
+
   if (action.type === COUNTER_DELETE) {
     return {
       ...state,
@@ -106,6 +122,14 @@ const counterReducer = (state, action) => {
 
 export const CountersProvider = ({ children }) => {
   const [state, dispatch] = useReducer(counterReducer, initialState);
+
+  const setSearchTerm = (query) => {
+    dispatch({ type: COUNTER_SEARCH_CHANGED, payload: { searchTerm: query }})
+  }
+
+  const setSearchFocused = (isFocused) => {
+    dispatch({ type: COUNTER_SEARCH_FOCUSED, payload: { searchBarFocused: isFocused }})
+  }
 
   const loadCounters =  async () => {
     dispatch({ type: COUNTER_FETCHING })
@@ -198,7 +222,9 @@ export const CountersProvider = ({ children }) => {
       loadCounters,
       selectCounter,
       deselectCounter,
-      deleteCounter
+      deleteCounter,
+      setSearchTerm,
+      setSearchFocused
     }}>
       {children}
     </CountersContext.Provider>
