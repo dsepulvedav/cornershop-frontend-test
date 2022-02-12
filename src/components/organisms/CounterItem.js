@@ -1,25 +1,44 @@
 import React, { useCallback, useContext, useEffect, useReducer, useState } from 'react';
 import { CountersContext } from '../../contexts/CountersContext';
-import { Button, DecrementIcon, IncrementIcon } from '../atoms';
+import { Button, DecrementIcon, IncrementIcon, useAlert } from '../atoms';
 import './CounterItem.css'
 import classnames from 'classnames';
+import { NoConnectionAlert } from '../molecules';
 
 export const CounterItem = ({ item }) => {
 
   const [ isSelected, setIsSelected ] = useState(false)
   const { incrementCounter, decrementCounter, state, selectCounter, deselectCounter } = useContext(CountersContext);
+  const { isVisible: isAlertVisible, hideAlert, showAlert } = useAlert()
+
+  const [retryCallback, setRetryCallback] = useState(() => {})
+  const [alertTitle, setAlertTitle] = useState(null)
 
   useEffect(() => {
     setIsSelected(state.selectedCounters?.some(counter => counter.id === item.id))
   }, [JSON.stringify(state.selectedCounters)])
 
-  const handleDecrement = useCallback(() => {
-    decrementCounter(item.id)
+  const handleDecrement = useCallback(async() => {
+    const result = await decrementCounter(item.id)
+    if (!result) {
+      setRetryCallback(handleDecrement)
+      setAlertTitle(`Couldn't update "${item.title}" to ${item.count - 1}`)
+      showAlert() 
+    }
   })
 
-  const handleIncrement = useCallback(() => {
-    incrementCounter(item.id)
+  const handleIncrement = useCallback(async() => {
+    const result = await incrementCounter(item.id)
+    if (!result) {
+      setRetryCallback(() => retryIncrement())
+      setAlertTitle(`Couldn't update "${item.title}" to ${item.count + 1}`)
+      showAlert() 
+    }
   })
+
+  const retryIncrement = () => {
+    console.log('ikutydf')
+  }
 
   const handleItemClick = useCallback(() => {
     if (isSelected) {
@@ -49,6 +68,12 @@ export const CounterItem = ({ item }) => {
             </Button>
           </div>
         </div>
+        <NoConnectionAlert 
+          isVisible={isAlertVisible} 
+          retryCallback={retryCallback} 
+          onClose={hideAlert} 
+          title={alertTitle}
+        />
 
       </div>
   );
