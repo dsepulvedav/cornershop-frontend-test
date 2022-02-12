@@ -17,7 +17,7 @@ const COUNTER_SEARCH_FOCUSED = 'COUNTER_SEARCH_FOCUSED';
 const initialState = {
   loading: false,
   error: null,
-  counters: null, 
+  counters: [], 
   searchBarFocused: false,
   searchBarTerm: null,
   selectedCounters: []

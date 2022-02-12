@@ -45,7 +45,7 @@ export const MainScreenTemplate = () => {
             {state.loading && state.counters?.length === 0 && <Loading />}
             {state.error && <LoadingError />}
             {!state.counters?.length && <NoCountersMessage />}
-            {state.counters && <CounterList items={state.counters}/>}
+            {state.counters && <CounterList />}
           </div>
           <div className='col' />
         </div>
