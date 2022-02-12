@@ -17,7 +17,9 @@ export const SearchBar = ({ onChange, onFocusChange }) => {
   }
 
   const handleInputBlur = () => {
-    setTimeout(() => {setShouldRenderCancel(false)}, 40)
+    if (!query) {
+      setTimeout(() => {setShouldRenderCancel(false)}, 40)
+    }
     onFocusChange(false)
   }
 
