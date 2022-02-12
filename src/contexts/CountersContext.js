@@ -139,42 +139,51 @@ export const CountersProvider = ({ children }) => {
       headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
       body: JSON.stringify({title})
     })
+    if (!response.ok) return false
+    
     const data = await response.json()
-
-    if (response.ok) dispatch({ type: COUNTER_ADD, payload: data })
+    dispatch({ type: COUNTER_ADD, payload: data })
+    return true
   }, [dispatch])
 
-  const incrementCounter = async (id) => {
+  const incrementCounter = useCallback(async (id) => {
     const body = { id }
-    await fetch('/api/v1/counter/inc', { 
+    const response = await fetch('/api/v1/counter/incs', { 
       method: 'post', 
       headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
       body: JSON.stringify(body) 
     })
 
+    if (!response.ok) return false
     dispatch({ type: COUNTER_INC, payload: { id } });
-  }
-  const decrementCounter = async (id) => {
+    return true
+  }, [dispatch])
+
+  const decrementCounter = useCallback(async (id) => {
     const body = { id }
-    await fetch('/api/v1/counter/dec', { 
+    const response = await fetch('/api/v1/counter/dec', { 
       method: 'post', 
       headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
       body: JSON.stringify(body) 
     })
 
+    if (!response.ok) return false
     dispatch({ type: COUNTER_DEC, payload: { id } });
-  }
+    return true
+  })
 
-  const deleteCounter = async (id) => {
+  const deleteCounter = useCallback(async (id) => {
     const body = { id }
-    await fetch('/api/v1/counter', { 
+    const response = await fetch('/api/v1/counter', { 
       method: 'delete', 
       headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
       body: JSON.stringify(body) 
     })
 
-    dispatch({ type: COUNTER_DELETE, payload: { id } });
-  }
+    if (!response.ok) return false
+    dispatch({ type: COUNTER_DELETE, payload: { id } })
+    return true
+  })
 
   useEffect(() => {
     loadCounters()
