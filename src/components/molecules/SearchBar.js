@@ -1,26 +1,45 @@
-import React from 'react';
-import { Input } from '../atoms';
+import React, { useEffect, useState } from 'react';
+import { Button, Input } from '../atoms';
 
-export const SearchBar = ({ onChange,onFocusChange }) => {
+export const SearchBar = ({ onChange, onFocusChange }) => {
+
+  const [query, setQuery] = useState('')
+  const [shouldRenderCancel, setShouldRenderCancel] = useState(false)
+
   const handleInputChange = (event) => {
-    onChange(event.target.value)
+    const { value } = event.target
+    setQuery(value)
   };
 
   const handleInputFocus = () => {
     onFocusChange(true)
+    setShouldRenderCancel(true)
   }
 
   const handleInputBlur = () => {
+    setTimeout(() => {setShouldRenderCancel(false)}, 40)
     onFocusChange(false)
   }
 
+  const handleCancelClick = () => {
+    setQuery('')
+    setShouldRenderCancel(false)
+  }
+
+  useEffect(() => {
+    onChange(query)
+  }, [query])
+
   return (
-    <div>
-      <Input 
+    <div className='d-flex flex-row'>
+      <Input
+        value={query}
         placeholder="Search Counters"
         onChange={handleInputChange}
         onFocus={handleInputFocus}
         onBlur={handleInputBlur}
       />
-    </div>);
-};
+      {shouldRenderCancel && <Button color='white' className='ms-2' onClick={handleCancelClick}>Cancel</Button>}
+    </div>
+    )
+}
