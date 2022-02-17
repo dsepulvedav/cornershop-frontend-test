@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useEffect, useReducer, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { CountersContext } from '../../contexts/CountersContext';
 import { Button, DecrementIcon, IncrementIcon, useAlert } from '../atoms';
 import './CounterItem.css'
