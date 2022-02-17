@@ -11,7 +11,7 @@ export const CounterItem = ({ item }) => {
   const { incrementCounter, decrementCounter, state, selectCounter, deselectCounter } = useContext(CountersContext);
   const { isVisible: isAlertVisible, hideAlert, showAlert } = useAlert()
 
-  const [retryCallback, setRetryCallback] = useState(() => {})
+  const [retryAction, setRetryAction] = useState(null)
   const [alertTitle, setAlertTitle] = useState(null)
 
   useEffect(() => {
@@ -21,8 +21,8 @@ export const CounterItem = ({ item }) => {
   const handleDecrement = useCallback(async() => {
     const result = await decrementCounter(item.id)
     if (!result) {
-      setRetryCallback(handleDecrement)
-      setAlertTitle(`Couldn't update "${item.title}" to ${item.count - 1}`)
+      setRetryAction('decrement')
++      setAlertTitle(`Couldn't update "${item.title}" to ${item.count - 1}`)
       showAlert() 
     }
   })
@@ -30,15 +30,11 @@ export const CounterItem = ({ item }) => {
   const handleIncrement = useCallback(async() => {
     const result = await incrementCounter(item.id)
     if (!result) {
-      setRetryCallback(() => retryIncrement())
+      setRetryAction('increment')
       setAlertTitle(`Couldn't update "${item.title}" to ${item.count + 1}`)
       showAlert() 
     }
   })
-
-  const retryIncrement = () => {
-    console.log('ikutydf')
-  }
 
   const handleItemClick = useCallback(() => {
     if (isSelected) {
@@ -69,8 +65,10 @@ export const CounterItem = ({ item }) => {
           </div>
         </div>
         <NoConnectionAlert 
-          isVisible={isAlertVisible} 
-          retryCallback={retryCallback} 
+          isVisible={isAlertVisible}
+          incrementAction={handleIncrement}
+          decrementAction={handleDecrement}
+          retryAction={retryAction} 
           onClose={hideAlert} 
           title={alertTitle}
         />
