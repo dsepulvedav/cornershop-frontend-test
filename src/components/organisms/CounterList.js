@@ -15,7 +15,7 @@ export const CounterList = () => {
     } else {
       setItems(state.counters)
     }
-  }, [state.searchBarTerm])
+  }, [state.searchBarTerm, JSON.stringify(state.counters)])
 
   const listColClasses = classnames('col', {'my-auto': items.length === 0})
   const listRowClasses = classnames('row', {'h-100': items.length === 0})
