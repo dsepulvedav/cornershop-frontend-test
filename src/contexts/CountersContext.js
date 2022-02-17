@@ -172,7 +172,7 @@ export const CountersProvider = ({ children }) => {
 
   const incrementCounter = useCallback(async (id) => {
     const body = { id }
-    const response = await fetch('/api/v1/counter/incs', { 
+    const response = await fetch('/api/v1/counter/inc', { 
       method: 'post', 
       headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
       body: JSON.stringify(body) 
