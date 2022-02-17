@@ -1,9 +1,11 @@
 import React, { useCallback, useContext, useEffect, useState } from 'react';
-import { CountersContext } from '../../contexts/CountersContext';
-import { Button, DecrementIcon, IncrementIcon, useAlert } from '../atoms';
-import './CounterItem.css'
 import classnames from 'classnames';
+import { useLongPress } from 'use-long-press';
+import { Button, DecrementIcon, IncrementIcon, useAlert } from '../atoms';
 import { NoConnectionAlert } from '../molecules';
+import { CountersContext } from '../../contexts/CountersContext';
+import './CounterItem.css'
+
 
 export const CounterItem = ({ item }) => {
 
@@ -36,6 +38,10 @@ export const CounterItem = ({ item }) => {
     }
   })
 
+  const bind = useLongPress(() => {
+    handleItemClick()
+  });
+
   const handleItemClick = useCallback(() => {
     if (isSelected) {
       deselectCounter(item)
@@ -49,7 +55,7 @@ export const CounterItem = ({ item }) => {
     : classnames('row', 'item-row');
 
   return (
-      <div className={rowClasses} onClick={handleItemClick}>
+      <div className={rowClasses} {...bind}>
         <div className='col-8 col-sm-6 col-xl-9 text-start'>
           {item.title}
         </div>
